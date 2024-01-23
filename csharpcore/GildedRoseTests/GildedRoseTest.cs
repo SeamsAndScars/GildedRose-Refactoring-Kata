@@ -77,5 +77,33 @@ namespace GildedRoseTests
             Assert.AreEqual(5, items[0].SellIn);
             Assert.AreEqual(80, items[0].Quality);
         }
+        
+        [Test]
+        public void UpdateQuality_BackstagePasses_QualityNeverMoreThan50()
+        {
+            var items = new List<Item> { new Item { Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = 3, Quality = 50 } };
+            var app = new GildedRose(items);
+
+            app.UpdateQuality();
+
+            Assert.AreEqual("Backstage passes to a TAFKAL80ETC concert", items[0].Name);
+            Assert.AreEqual(2, items[0].SellIn);
+            Assert.AreEqual(50, items[0].Quality); 
+        }
+        
+        [Test]
+        public void UpdateQuality_BackstagePasses_DropsToZeroAfterConcert()
+        {
+            var items = new List<Item> { new Item { Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = 0, Quality = 20 } };
+            var app = new GildedRose(items);
+
+            app.UpdateQuality();
+
+            Assert.AreEqual("Backstage passes to a TAFKAL80ETC concert", items[0].Name);
+            Assert.AreEqual(-1, items[0].SellIn);
+            Assert.AreEqual(0, items[0].Quality); // Update expected value to 0
+        }
+
+
     }
 }
